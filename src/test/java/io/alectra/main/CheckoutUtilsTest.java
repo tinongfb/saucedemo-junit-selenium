@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -54,11 +55,38 @@ class CheckoutUtilsTest {
 	
 	@Test
 	@Order(4)
+	public void checkoutDetailsProceedTest() throws InterruptedException {
+		checkoutUtils.checkoutDetailsProceed();
+		assertTrue(driver.getTitle().contains("Checkout: Overview"), "Checkout overview title is displayed");
+	}
+	
+	@Test
+	@Order(5)
+	public void computePriceTotalTest() throws InterruptedException {
+		checkoutUtils.computePriceTotal(0);
+		assertTrue(driver.getCurrentUrl().contains("cart.html") || driver.getCurrentUrl().contains("inventory.html"), "Cancelled during checkout");
+	}
+	
+	@Test
+	@Order(6)
+	public void computeTaxTotalTest() throws InterruptedException {
+		checkoutUtils.cancelCheckout();
+		assertTrue(driver.getCurrentUrl().contains("cart.html") || driver.getCurrentUrl().contains("inventory.html"), "Cancelled during checkout");
+	}
+	
+	@Test
+	@Order(7)
 	public void cancelCheckoutTest() throws InterruptedException {
 		checkoutUtils.cancelCheckout();
 		assertTrue(driver.getCurrentUrl().contains("cart.html") || driver.getCurrentUrl().contains("inventory.html"), "Cancelled during checkout");
 	}
 	
-	
+	@AfterAll
+	public static void tearDown() throws InterruptedException {
+		Thread.sleep(3000);
+		if (driver != null) {
+			driver.quit();
+		}
+	}
 	
 }
