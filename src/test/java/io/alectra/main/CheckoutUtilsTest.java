@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import io.alectra.utils.BrowserDriver;
@@ -39,8 +40,25 @@ class CheckoutUtilsTest {
 	
 	@Test
 	@Order(2)
-	public void proceedCheckoutTest() {
-		
+	public void proceedCheckoutTest() throws InterruptedException {
+		checkoutUtils.checkout();
+		assertTrue(driver.getCurrentUrl().contains("checkout-step-one.html"), "In checkout-one page");
 	}
 
+	@Test
+	@Order(3)
+	public void checkoutDetailsFillUpTest() throws InterruptedException {
+		checkoutUtils.checkoutDetailsFillUp();
+		assertTrue(driver.findElement(By.id("first-name")) != null, "Fields are not empty");
+	}
+	
+	@Test
+	@Order(4)
+	public void cancelCheckoutTest() throws InterruptedException {
+		checkoutUtils.cancelCheckout();
+		assertTrue(driver.getCurrentUrl().contains("cart.html") || driver.getCurrentUrl().contains("inventory.html"), "Cancelled during checkout");
+	}
+	
+	
+	
 }
